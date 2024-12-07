@@ -1,4 +1,7 @@
 
+import java.util.Scanner;
+
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -27,6 +30,15 @@ public class Produto {
         this.index = index;
         this.nome = nome;
         this.marca = marca;
+        this.preco = preco;
+        this.estoque = estoque;
+        this.ativo = true;
+    }
+
+    public Produto(int id, int index, float preco, String nome, int estoque) {
+        this.id = id;
+        this.index = index;
+        this.nome = nome;
         this.preco = preco;
         this.estoque = estoque;
         this.ativo = true;
@@ -104,5 +116,36 @@ public class Produto {
                 + "\nEstoque: " + this.getEstoque()
                 + "\nValor do estoque: " + this.getEstoque() * this.getPreco()
                 + "\nStatus: " + this.getAtivoString());
+    }
+
+    public static void adicionarProduto() {
+        int tempId;
+        int tempIndex;
+        float tempPreco;
+        String tempNome;
+        String tempMarca;
+        int tempEstoque;
+        
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("Insira o nome do produto:");
+        tempNome = in.nextLine();
+
+        System.out.println("Insira a marca do produto:");
+        tempMarca = in.nextLine();
+
+        System.out.println("Insira o preço do produto:");
+        tempPreco = Main.tryPrice();
+
+        System.out.println("Insira o ID do produto:");
+        tempId = (int) Main.tryPositive("int");
+
+        System.out.println("Insira a quantidade em estoque do produto:");
+        tempEstoque = (int) Main.tryPositive("int");
+
+        tempIndex = Main.produtos;
+        Main.produtos++;
+
+        Main.produto[tempIndex] = new Produto(tempId, tempIndex, tempPreco, tempNome, tempMarca, tempEstoque);
     }
 }

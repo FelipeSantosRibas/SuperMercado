@@ -11,8 +11,9 @@ import java.util.Scanner;
 
 public class Main {
 
+    public static int maxProdutos = 100;
     public static int produtos = 0;
-    public static Produto produto[] = new Produto[100];
+    public static Produto produto[] = new Produto[maxProdutos];
 
     //Método main
     public static void main(String[] args) {
@@ -20,31 +21,33 @@ public class Main {
 
         produto[produtos] = new Produto(12345, produtos, 0, "Default", "Default", 0);
         produtos++;
-
         do {
             System.out.println("Bem vindo ao gerenciador de produtos! \n");
             System.out.println("Que ação deseja realizar?");
             System.out.println("[1] Adicionar produtos");
             System.out.println("[2] Visualizar produtos");
             System.out.println("[3] Modificar produtos");
+            System.out.println("[4] Mostrar todos os produtos");
             System.out.println("[0] Encerrar sessão");
 
             do {
                 temp = tryInt();
-                if (temp < 0 || temp > 3) {
+                if (temp < 0 || temp > 4) {
                     System.out.println("Por favor, insira uma opção válida.");
                 }
-            } while (temp < 0 || temp > 3);
+            } while (temp < 0 || temp > 4);
 
             switch (temp) {
                 case 0 -> {
                 }
                 case 1 ->
-                    adicionarProdutos();
+                    adicionadorDeProdutos();
                 case 2 ->
-                    visualizarProdutos();
+                    visualizadorDeProdutos();
                 case 3 ->
-                    modificarProdutos();
+                    modificadorDeProdutos();
+                case 4 ->
+                    mostrarInventario(produto);
                 default ->
                     System.out.println("Esta função ainda está em desenvolvimento!\n");
             }
@@ -118,17 +121,11 @@ public class Main {
     }
 
     public static float tryPrice() {
-        return ((float)((int)((float) tryPositive("float")  * 100))/100); // corta 2 zeros
+        return ((float) ((int) ((float) tryPositive("float") * 100)) / 100); // corta 2 zeros
     }
 
     //Gerenciador de produtos
-    public static void adicionarProdutos() {
-        int tempId;
-        int tempIndex;
-        float tempPreco;
-        String tempNome;
-        String tempMarca;
-        int tempEstoque;
+    public static void adicionadorDeProdutos() {
         int quantidade;
 
         Scanner in = new Scanner(System.in);
@@ -136,40 +133,46 @@ public class Main {
         System.out.println("Quantos produtos deseja inserir?");
 
         do {
-            quantidade = tryInt();
-            if (quantidade < 0) {
-                System.out.println("Insira um número válido.");
+            do {
+                quantidade = tryInt();
+                if (quantidade < 0) { // Se produto for menor que 0
+                    System.out.println("Insira um número válido.");
+                }
+            } while (quantidade < 0);
+            if (quantidade + produtos > maxProdutos) { // Se quantidade for maior que o limite 
+                System.out.println("Este número é maior que o limite de produtos!");
             }
-        } while (quantidade < 0);
+        } while (quantidade + produtos > maxProdutos);
 
         for (int i = 0; i < quantidade; i++) {
-            System.out.println("Insira o nome do produto:");
-            tempNome = in.nextLine();
+            int tipo;
+            System.out.println("Qual tipo de produto deseja inserir?");
+            System.out.println("[1] Padrão \n"
+                    + "[2] DVD \n"
+                    + "[3] CD");
+            do {
+                tipo = (int) tryPositive("int");
+                if (tipo < 1 || tipo > 3) {
+                    System.out.println("Por favor, insira uma opção válida.");
+                }
+            } while (tipo < 1 || tipo > 3);
 
-            System.out.println("Insira a marca do produto:");
-            tempMarca = in.nextLine();
+            switch (tipo) {
+                case 1 ->
+                    Produto.adicionarProduto();
+                case 2 ->
+                    DVD.adicionarProduto();
+                case 3 ->
+                    CD.adicionarProduto();
+            }
 
-            System.out.println("Insira o preço do produto:");
-            tempPreco = tryPrice();
-
-            System.out.println("Insira o ID do produto:");
-            tempId = (int) tryPositive("int");
-
-            System.out.println("Insira a quantidade em estoque do produto:");
-            tempEstoque = (int) tryPositive("int");
-
-            tempIndex = produtos;
-            produtos++;
-
-            produto[tempIndex] = new Produto(tempId, tempIndex, tempPreco, tempNome, tempMarca, tempEstoque);
-
-            System.out.println(produto[tempIndex].toString());
+            System.out.println(produto[produtos - 1].toString());
 
             System.out.println();
         }
     }
 
-    public static void visualizarProdutos() {
+    public static void visualizadorDeProdutos() {
         String resposta;
         int index;
         boolean erro;
@@ -195,7 +198,7 @@ public class Main {
         } while (!resposta.equals("SAIR"));
     }
 
-    public static void modificarProdutos() {
+    public static void modificadorDeProdutos() {
         String resposta, resposta2, resposta4;
         int resposta3 = -1;
         int index;
@@ -266,8 +269,17 @@ public class Main {
 
                                             }
                                             case 5 -> { // Alterar Estoque
-                                                produto[index].setEstoque((int) tryPositive("int"));
-
+                                                int tempEstoque;
+                                                boolean erro2 = false;
+                                                do{
+                                                    erro2 = false;
+                                                    tempEstoque = (int) tryPositive("int");
+                                                    if ( tempEstoque > produto[index].getEstoque() && produto[index].getAtivo() == false){
+                                                        System.out.println("Você não pode adicionar estoque a um produto descontinuado!");
+                                                        erro2 = true;
+                                                    }
+                                                } while( erro2 == true);
+                                                produto[index].setEstoque(tempEstoque);
                                             }
                                             case 6 -> { // Alterar Status
                                                 System.out.println("(ativo / descontinuado)");
@@ -303,5 +315,11 @@ public class Main {
                 }
             } while (erro == true);
         } while (!resposta.equals("SAIR"));
+    }
+
+    public static void mostrarInventario(Produto[] produtos) {
+        for (Produto produto : produtos) {
+            System.out.println(produto);
+        }
     }
 }
