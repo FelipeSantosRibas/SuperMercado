@@ -46,7 +46,8 @@ public class DVD extends Produto{
     
     // To string
     public String toString() {
-        return ("ID: " + this.getId()
+        return ("DVD:"
+                +"\nID: " + this.getId()
                 + "\nÍndice: " + this.getIndex()
                 + "\nNome: " + this.getNome()
                 + "\nEstúdio: " + this.getMarca()

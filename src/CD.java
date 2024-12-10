@@ -53,7 +53,8 @@ public class CD extends Produto {
 
     // To string
     public String toString() {
-        return ("ID: " + this.getId()
+        return ("CD:"
+                +"\nID: " + this.getId()
                 + "\nÍndice: " + this.getIndex()
                 + "\nNome: " + this.getNome()
                 + "\nArtista: " + this.getArtista()

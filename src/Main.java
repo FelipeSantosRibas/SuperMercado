@@ -319,7 +319,9 @@ public class Main {
 
     public static void mostrarInventario(Produto[] produtos) {
         for (Produto produto : produtos) {
-            System.out.println(produto);
+            if (produto != null){
+                System.out.println(produto+"\n");
+            }
         }
     }
 }

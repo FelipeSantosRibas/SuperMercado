@@ -108,7 +108,8 @@ public class Produto {
 
     // To string
     public String toString() {
-        return ("ID: " + this.getId()
+        return ("Produto:"
+                +"\nID: " + this.getId()
                 + "\nÍndice: " + this.getIndex()
                 + "\nNome: " + this.getNome()
                 + "\nMarca: " + this.getMarca()
